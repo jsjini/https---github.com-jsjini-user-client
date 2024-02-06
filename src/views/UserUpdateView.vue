@@ -4,12 +4,6 @@
         <div class="row">
             <table class="table">
                 <tr>
-                    <th class="text-right table-primary">No.</th>
-                    <td class="text-center">
-                        <input class="form-control" type="number" v-model="userInfo.user_no" readonly>
-                    </td>
-                </tr>
-                <tr>
                     <th class="text-right table-primary">아이디</th>
                     <td class="text-center">
                         <input class="form-control" type="text" v-model="userInfo.user_id" readonly>
@@ -57,7 +51,6 @@ export default {
         return {
             // chkVal : "아니요",
             userInfo: {
-                user_no: null,
                 user_id: "",
                 user_pwd: "",
                 user_name: "",
@@ -76,14 +69,17 @@ export default {
 
             let data = this.getSendData();
             axios.put('/api/users/' + this.userInfo.user_id, data)
-            //                   .then(result => {
-                              
-            // let info = result.data;
-            // this.userInfo = info;
-                // 3) 결과처리
-            // })
+                 .then(result => {
+                    console.log(result);
+                    console.log(result.data.changedRows);
+                    if(result.data.changedRows == 1) {
+                        alert('수정이 완료되었습니다.');
+                        this.$router.push('/userInfo?userId='+this.userInfo.user_id);
+                    } else {
+                        alert('수정 실패.');
+                    }
+                 })
             .catch(err => console.log(err));
-
         },
         validation() {
             if (this.userInfo.user_pwd == "") {
